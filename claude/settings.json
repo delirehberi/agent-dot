@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "defaultMode": "plan"
+  },
+  "model": "sonnet",
+  "enabledPlugins": {
+    "agent-skills@addy-agent-skills": false
+  },
+  "env": {
+    "ENABLE_TOOL_SEARCH": "true"
+  },
+  "extraKnownMarketplaces": {
+    "addy-agent-skills": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/addyosmani/agent-skills.git"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": false,
+  "editorMode": "vim",
+  "tui": "fullscreen"
+}
