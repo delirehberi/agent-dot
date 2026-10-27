@@ -50,10 +50,6 @@
       "provider": "openai",
       "model": "gpt-5-mini"
     },
-    "subagent_model": {
-      "provider": "openai",
-      "model": "gpt-5-mini"
-    },
     "auto_compact": {
       "enabled": true,
       "threshold": 35000
@@ -93,14 +89,14 @@
   "agent_servers": {
     "codex-acp": {
       "default_config_options": {
-        "model": "gpt-6.1-sol"
+        "model": "gpt-5.5"
       },
       "type": "registry"
     },
     "antigravity-acp": {
       "default_config_options": {
         "mode": "auto_edit",
-        "thinking_level": "medium",
+        "thinking_level": "low",
         "model": "gemini-4-argon"
       },
       "type": "registry"

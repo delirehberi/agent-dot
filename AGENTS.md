@@ -103,14 +103,15 @@ Code is only complete when:
 
 
 ## Token & Context Hygiene (Global Rules)
-1. **Subagent Quarantine for `bitig` MCP & Git Diffs**:
-   - NEVER call `bitig` MCP tools (`mcp__bitig__*`) or run full `git diff` / `git log -p` directly in the main thread—even during Plan Mode.
-   - During both Plan Mode and Implementation, always delegate `bitig` task creation (`add_task`), listing (`list_tasks`), and status updates (`update_task`, `complete_task`) to the `bitig-ops` subagent (or fast lightweight sub-task in Codex/Antigravity).
-   - The subagent executes the `bitig` MCP calls and returns ONLY a dense summary (max 10 lines: task IDs, titles, and statuses) so the main thread can write the plan file without ingesting raw JSON.
-2. **Targeted File Reads**:
+1. **Targeted File Reads**:
    - Before reading unfamiliar files over 200 lines, use `rg -n` (ripgrep) to locate exact line numbers and read only the relevant line range.
    - Never read lockfiles (`flake.lock`, `package-lock.json`, `cabal.project.freeze`) or build artifacts (`dist-newstyle/`, `.direnv/`, `node_modules/`).
+2. **Concise Git Inspection**:
+   - Prefer `git status` and `git diff --stat` over full `git diff` / `git log -p` dumps unless inspecting a specific file's diff.
 
 # graphify
 - **graphify** (`~/.agents/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
 When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+
+## Tool & MCP Guardrails
+- **Figma MCP Check:** All Figma MCPs and plugins are disabled by default to save tokens. Whenever the user shares a `figma.com` URL, mentions Figma, or asks to implement a UI from a design, STOP immediately before writing code and remind the user: *"⚠️ Figma MCP is currently disabled. Run `figma-on` (or enable `figma` in Zed `context_servers`) before we continue, and remember to turn it off after!"*

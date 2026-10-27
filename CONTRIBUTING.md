@@ -12,7 +12,7 @@ Thank you for your interest in contributing to `agent-dots`!
    - Communicate exclusively in English across all documentation, plans, and directives.
 3. **Verification Before Submitting:**
    - Run `make check` (or `make dev`) before opening a pull request to verify:
-     - `manage.sh` syntax (`bash -n`)
+     - `manage.sh` and `figma-toggle.sh` syntax (`bash -n`)
      - Valid JSON in `claude/settings.json`
      - Zero hardcoded personal paths or private endpoints
      - Complete coverage of template variables in `.env.secrets.example`

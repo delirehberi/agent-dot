@@ -43,7 +43,7 @@ sync_configs() {
   ln -sfn "${AGENTS_DIR}/AGENTS.md" "${HOME}/.codex/AGENTS.md"
   ln -sfn "${AGENTS_DIR}/AGENTS.md" "${HOME}/.gemini/GEMINI.md"
   ln -sfn "${AGENTS_DIR}/claude/settings.json" "${HOME}/.claude/settings.json"
-  ln -sfn "${AGENTS_DIR}/claude/agents" "${HOME}/.claude/agents"
+  rm -f "${HOME}/.claude/agents"
 
   local skill_path skill_name
   for skill_path in "${AGENTS_DIR}/skills"/*; do
@@ -74,7 +74,6 @@ status_configs() {
     "${HOME}/.codex/AGENTS.md" \
     "${HOME}/.gemini/GEMINI.md" \
     "${HOME}/.claude/settings.json" \
-    "${HOME}/.claude/agents" \
     "${HOME}/.claude/skills/graphify" \
     "${HOME}/.codex/skills/graphify" \
     "${HOME}/.gemini/config/skills/graphify" \
@@ -84,8 +83,9 @@ status_configs() {
 }
 
 check_configs() {
-  echo "==> Validating manage.sh syntax..."
+  echo "==> Validating shell script syntax..."
   bash -n "${AGENTS_DIR}/manage.sh"
+  bash -n "${AGENTS_DIR}/figma-toggle.sh"
 
   echo "==> Validating claude/settings.json..."
   jq empty "${AGENTS_DIR}/claude/settings.json"

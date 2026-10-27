@@ -1,19 +1,19 @@
-model_auto_compact_token_limit = 35000
+model_auto_compact_token_limit = 20000
 model = "gpt-5.5"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "low"
 
 [plugins."canva@openai-curated"]
-enabled = true
+enabled = false
 
 [plugins."figma@openai-curated"]
-enabled = true
+enabled = false
 
 [features]
-memories = true
+memories = false
 
 [memories]
-generate_memories = true
-use_memories = true
+generate_memories = false
+use_memories = false
 
 # Define local Ollama provider (uses Ollama's built-in /v1/responses compatibility)
 [model_providers.local_ollama]

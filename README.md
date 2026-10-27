@@ -12,7 +12,6 @@ Unified multi-agent dotfiles, operating directives, language-specific engineerin
 - **Claude Code:**
   - `~/.claude/CLAUDE.md` -> `~/.agents/AGENTS.md`
   - `~/.claude/settings.json` -> `~/.agents/claude/settings.json`
-  - `~/.claude/agents` -> `~/.agents/claude/agents`
   - `~/.claude/skills/<skill>` -> `~/.agents/skills/<skill>`
 - **OpenAI Codex:**
   - `~/.codex/AGENTS.md` -> `~/.agents/AGENTS.md`
@@ -32,10 +31,9 @@ Unified multi-agent dotfiles, operating directives, language-specific engineerin
 ├── AGENTS.md                 # Core operating directives, execution rules, and hygiene rules
 ├── Makefile                  # Standard build, verification, and deployment targets
 ├── manage.sh                 # Symlink synchronization, template rendering, and secret/path checks
+├── figma-toggle.sh           # Shell helper (figma-on / figma-off) to toggle Figma MCPs & plugins
 ├── .env.secrets.example      # Template for local environment variables and MCP credentials
 ├── claude/
-│   ├── agents/
-│   │   └── bitig-ops.md      # Lightweight subagent definition for Bitig MCP and Git summaries
 │   └── settings.json         # Claude Code CLI preferences and permissions
 ├── codex/
 │   └── config.toml.tpl       # OpenAI Codex configuration template (including local Ollama profile)
@@ -100,9 +98,24 @@ All operations are encapsulated in the `Makefile`:
 - `make status` — Inspect active symlinks in `$HOME` and `git status` of `~/.agents`.
 - `make check` — Run static checks (`bash -n`, `jq`, personal-path scan, and template variable coverage).
 
+### Token Hygiene: Toggling Figma MCP (`figma-toggle.sh`)
+
+Figma MCP servers and plugins are disabled by default to prevent unnecessary context/token consumption during non-UI sessions.
+
+Source `figma-toggle.sh` in your `~/.zshrc` or `~/.bashrc`:
+
+```bash
+source ~/.agents/figma-toggle.sh
+```
+
+Then toggle Figma integrations on demand (or invoke `./figma-toggle.sh {on|off}` directly):
+
+- `figma-on` — Enables Figma plugins/MCPs across Claude Code, OpenAI Codex, and Zed, and schedules a 45-minute desktop notification reminder.
+- `figma-off` — Disables Figma plugins/MCPs and locks down plugin directories to restore token savings.
+
 ## Customizing Directives
 
-- **Global Rules:** Edit `AGENTS.md` to adjust planning workflows, subagent quarantine rules, or git policies.
+- **Global Rules:** Edit `AGENTS.md` to adjust planning workflows, token hygiene rules, or git policies.
 - **Language Stack Rules:** Add `<language>.md` under `languages.d/` or `devops.d/` and reference the trigger condition in `AGENTS.md`.
 - **Editor & CLI Templates:** Edit `zed/settings.json.tpl` or `codex/config.toml.tpl` using `${VAR_NAME}` placeholders, add any new variable names to `.env.secrets.example` and `.env.secrets`, and run `make deploy`.
 

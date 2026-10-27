@@ -1,13 +1,18 @@
 {
+  "env": {
+    "ENABLE_TOOL_SEARCH": "true",
+    "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
+  },
   "permissions": {
     "defaultMode": "plan"
   },
   "model": "sonnet",
+  "disableClaudeAiConnectors": true,
   "enabledPlugins": {
-    "agent-skills@addy-agent-skills": false
-  },
-  "env": {
-    "ENABLE_TOOL_SEARCH": "true"
+    "agent-skills@addy-agent-skills": false,
+    "engineering@synced": false,
+    "searchfit-seo@synced": false,
+    "figma-suite@synced": false
   },
   "extraKnownMarketplaces": {
     "addy-agent-skills": {
@@ -18,6 +23,6 @@
     }
   },
   "alwaysThinkingEnabled": false,
-  "editorMode": "vim",
-  "tui": "fullscreen"
+  "tui": "fullscreen",
+  "editorMode": "vim"
 }
