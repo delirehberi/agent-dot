@@ -28,7 +28,15 @@ sync_configs() {
   local vars
   vars="$(load_secrets_vars)"
 
-  mkdir -p "${HOME}/.claude" "${HOME}/.codex" "${HOME}/.gemini" "${HOME}/.config/zed"
+  mkdir -p \
+    "${HOME}/.claude" \
+    "${HOME}/.claude/skills" \
+    "${HOME}/.codex" \
+    "${HOME}/.codex/skills" \
+    "${HOME}/.gemini" \
+    "${HOME}/.gemini/config/skills" \
+    "${HOME}/.gemini/skills" \
+    "${HOME}/.config/zed"
 
   ln -sfn "${AGENTS_DIR}/AGENTS.md" "${HOME}/AGENTS.md"
   ln -sfn "${AGENTS_DIR}/AGENTS.md" "${HOME}/.claude/CLAUDE.md"
@@ -36,6 +44,16 @@ sync_configs() {
   ln -sfn "${AGENTS_DIR}/AGENTS.md" "${HOME}/.gemini/GEMINI.md"
   ln -sfn "${AGENTS_DIR}/claude/settings.json" "${HOME}/.claude/settings.json"
   ln -sfn "${AGENTS_DIR}/claude/agents" "${HOME}/.claude/agents"
+
+  local skill_path skill_name
+  for skill_path in "${AGENTS_DIR}/skills"/*; do
+    [[ -d "${skill_path}" ]] || continue
+    skill_name="$(basename "${skill_path}")"
+    ln -sfn "${skill_path}" "${HOME}/.claude/skills/${skill_name}"
+    ln -sfn "${skill_path}" "${HOME}/.codex/skills/${skill_name}"
+    ln -sfn "${skill_path}" "${HOME}/.gemini/config/skills/${skill_name}"
+    ln -sfn "${skill_path}" "${HOME}/.gemini/skills/${skill_name}"
+  done
 
   if [[ -f "${AGENTS_DIR}/zed/settings.json.tpl" ]]; then
     envsubst "${vars}" < "${AGENTS_DIR}/zed/settings.json.tpl" > "${HOME}/.config/zed/settings.json"
@@ -56,7 +74,11 @@ status_configs() {
     "${HOME}/.codex/AGENTS.md" \
     "${HOME}/.gemini/GEMINI.md" \
     "${HOME}/.claude/settings.json" \
-    "${HOME}/.claude/agents"
+    "${HOME}/.claude/agents" \
+    "${HOME}/.claude/skills/graphify" \
+    "${HOME}/.codex/skills/graphify" \
+    "${HOME}/.gemini/config/skills/graphify" \
+    "${HOME}/.gemini/skills/graphify"
   echo ""
   git -C "${AGENTS_DIR}" status -s
 }

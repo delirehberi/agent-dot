@@ -13,11 +13,15 @@ Unified multi-agent dotfiles, operating directives, language-specific engineerin
   - `~/.claude/CLAUDE.md` -> `~/.agents/AGENTS.md`
   - `~/.claude/settings.json` -> `~/.agents/claude/settings.json`
   - `~/.claude/agents` -> `~/.agents/claude/agents`
+  - `~/.claude/skills/<skill>` -> `~/.agents/skills/<skill>`
 - **OpenAI Codex:**
   - `~/.codex/AGENTS.md` -> `~/.agents/AGENTS.md`
   - `~/.codex/config.toml` (rendered from `codex/config.toml.tpl` with `chmod 600`)
+  - `~/.codex/skills/<skill>` -> `~/.agents/skills/<skill>`
 - **Gemini / Antigravity:**
   - `~/.gemini/GEMINI.md` -> `~/.agents/AGENTS.md`
+  - `~/.gemini/config/skills/<skill>` -> `~/.agents/skills/<skill>`
+  - `~/.gemini/skills/<skill>` -> `~/.agents/skills/<skill>`
 - **Zed Editor:**
   - `~/.config/zed/settings.json` (rendered from `zed/settings.json.tpl` with `chmod 600`)
 
@@ -45,6 +49,7 @@ Unified multi-agent dotfiles, operating directives, language-specific engineerin
 ├── skills/
 │   ├── bitig-planning/       # Task & roadmap tracking skill via Bitig MCP
 │   ├── find-skills/          # Skill discovery helper
+│   ├── graphify/             # Codebase & corpus knowledge graph builder and query skill
 │   ├── hallmark/             # Anti-AI-slop frontend design & audit skill
 │   └── microsoft-foundry/    # Azure AI Foundry skill suite
 └── zed/

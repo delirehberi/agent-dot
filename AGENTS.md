@@ -110,3 +110,7 @@ Code is only complete when:
 2. **Targeted File Reads**:
    - Before reading unfamiliar files over 200 lines, use `rg -n` (ripgrep) to locate exact line numbers and read only the relevant line range.
    - Never read lockfiles (`flake.lock`, `package-lock.json`, `cabal.project.freeze`) or build artifacts (`dist-newstyle/`, `.direnv/`, `node_modules/`).
+
+# graphify
+- **graphify** (`~/.agents/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
