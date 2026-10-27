@@ -45,7 +45,7 @@ When working on project files, automatically apply the specific guidelines from 
 * **Nix:** If a `shell.nix` or `flake.nix` file is present, use `nix` commands to execute project tooling.
 * **Haskell:** Do not attempt to run `ghc` tooling directly on Haskell projects.
 * **Nostr Testing (`nak`):** Use the `nak` tool for testing Nostr-related tasks.
-  * Always execute `nak` outside the sandbox (Claude Code: `dangerouslyDisableSandbox: true`; Gemini: `BypassSandbox: true`).
+  * Always execute `nak` outside the sandbox (Claude Code: `dangerouslyDisableSandbox: true`; Codex: `sandbox_permissions` escalation; Gemini / Antigravity: `BypassSandbox: true` or unsandboxed host command execution).
   * Always call the binary via its exact host path: `~/.local/bin/nak` so it retains full network relay and host access.
 * **Debugging Tools:** Use existing CLI utilities (such as `curl`,`jq`) for debugging or verification instead of writing temporary Python/Node scripts.
 * **Network Constraints:** If a URL is inaccessible on the first try, do not attempt alternative workarounds or fallbacks. Simply ask for a manual copy-paste of the content.
@@ -67,7 +67,7 @@ When working on project files, automatically apply the specific guidelines from 
 * **No global mutations:** Never modify global state, `process.env`, or prototypes dynamically. Exception: registering process-level handlers (`unhandledRejection`, `uncaughtException`, `SIGTERM`/`SIGINT`) once at the application entrypoint, as `nodejs.md` requires.
 * **No hardcoded secrets:** Never place raw API keys, passwords, or connection strings in code—use environment variables.
 * **No magic numbers/strings:** Always extract magic values into well-named constants.
-* **No Upper Directory:** Never try to read files from outside of working directory. If you are allowed to one directory, do not assume to explore files in upper or home directories. Its only acceptable if me specifically ask it for. 
+* **No Upper Directory:** Never try to read files from outside of working directory. If you are allowed to one directory, do not assume to explore files in upper or home directories. Its only acceptable if me specifically ask it for. Exception: reading agent directives and skills from `~/.agents/`, `~/.claude/`, `~/.codex/`, and `~/.gemini/` (such as `~/.agents/languages.d/`, `~/.agents/devops.d/`, and `SKILL.md` files).
 
 ## Pre-Response & Verification Checklist
 Before outputting any final code or implementation plan, verify the following:
@@ -114,4 +114,4 @@ Code is only complete when:
 When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
 
 ## Tool & MCP Guardrails
-- **Figma MCP Check:** All Figma MCPs and plugins are disabled by default to save tokens. Whenever the user shares a `figma.com` URL, mentions Figma, or asks to implement a UI from a design, STOP immediately before writing code and remind the user: *"⚠️ Figma MCP is currently disabled. Run `figma-on` (or enable `figma` in Zed `context_servers`) before we continue, and remember to turn it off after!"*
+- **Figma MCP Check:** All Figma MCPs and plugins are disabled by default to save tokens. Whenever the user shares a `figma.com` URL, mentions Figma, or asks to implement a UI from a design, STOP immediately before writing code and remind the user: *"⚠️ Figma MCP is currently disabled. Run `figma-on` (which enables Figma across Claude, Codex, Antigravity, and Zed) before we continue, and remember to turn it off after!"*

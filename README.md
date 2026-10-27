@@ -12,6 +12,7 @@ Unified multi-agent dotfiles, operating directives, language-specific engineerin
 - **Claude Code:**
   - `~/.claude/CLAUDE.md` -> `~/.agents/AGENTS.md`
   - `~/.claude/settings.json` -> `~/.agents/claude/settings.json`
+  - `~/.claude/.mcp.json` (rendered from `claude/mcp.json.tpl` with `chmod 600`)
   - `~/.claude/skills/<skill>` -> `~/.agents/skills/<skill>`
 - **OpenAI Codex:**
   - `~/.codex/AGENTS.md` -> `~/.agents/AGENTS.md`
@@ -19,6 +20,7 @@ Unified multi-agent dotfiles, operating directives, language-specific engineerin
   - `~/.codex/skills/<skill>` -> `~/.agents/skills/<skill>`
 - **Gemini / Antigravity:**
   - `~/.gemini/GEMINI.md` -> `~/.agents/AGENTS.md`
+  - `~/.gemini/config/mcp_config.json` (rendered from `gemini/mcp_config.json.tpl` with `chmod 600`)
   - `~/.gemini/config/skills/<skill>` -> `~/.agents/skills/<skill>`
   - `~/.gemini/skills/<skill>` -> `~/.agents/skills/<skill>`
 - **Zed Editor:**
@@ -34,11 +36,14 @@ Unified multi-agent dotfiles, operating directives, language-specific engineerin
 ├── figma-toggle.sh           # Shell helper (figma-on / figma-off) to toggle Figma MCPs & plugins
 ├── .env.secrets.example      # Template for local environment variables and MCP credentials
 ├── claude/
+│   ├── mcp.json.tpl          # Claude Code MCP server configuration template
 │   └── settings.json         # Claude Code CLI preferences and permissions
 ├── codex/
 │   └── config.toml.tpl       # OpenAI Codex configuration template (including local Ollama profile)
 ├── devops.d/
 │   └── cloudflare.md         # Cloudflare Workers & edge runtime directives
+├── gemini/
+│   └── mcp_config.json.tpl   # Gemini / Antigravity MCP server configuration template
 ├── languages.d/
 │   ├── haskell.md            # Haskell functional architecture and safety directives
 │   ├── nodejs.md             # Node.js / TypeScript backend and stream/event-loop directives
@@ -110,8 +115,8 @@ source ~/.agents/figma-toggle.sh
 
 Then toggle Figma integrations on demand (or invoke `./figma-toggle.sh {on|off}` directly):
 
-- `figma-on` — Enables Figma plugins/MCPs across Claude Code, OpenAI Codex, and Zed, and schedules a 45-minute desktop notification reminder.
-- `figma-off` — Disables Figma plugins/MCPs and locks down plugin directories to restore token savings.
+- `figma-on` — Enables Figma plugins/MCPs across Claude Code, OpenAI Codex, Antigravity, and Zed, and schedules a 45-minute desktop notification reminder.
+- `figma-off` — Disables Figma plugins/MCPs and locks down plugin directories across Claude Code, OpenAI Codex, Antigravity, and Zed to restore token savings.
 
 ## Customizing Directives
 

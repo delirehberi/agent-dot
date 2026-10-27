@@ -34,6 +34,7 @@ sync_configs() {
     "${HOME}/.codex" \
     "${HOME}/.codex/skills" \
     "${HOME}/.gemini" \
+    "${HOME}/.gemini/config" \
     "${HOME}/.gemini/config/skills" \
     "${HOME}/.gemini/skills" \
     "${HOME}/.config/zed"
@@ -64,20 +65,43 @@ sync_configs() {
     envsubst "${vars}" < "${AGENTS_DIR}/codex/config.toml.tpl" > "${HOME}/.codex/config.toml"
     chmod 600 "${HOME}/.codex/config.toml"
   fi
+
+  if [[ -f "${AGENTS_DIR}/gemini/mcp_config.json.tpl" ]]; then
+    envsubst "${vars}" < "${AGENTS_DIR}/gemini/mcp_config.json.tpl" > "${HOME}/.gemini/config/mcp_config.json"
+    chmod 600 "${HOME}/.gemini/config/mcp_config.json"
+  fi
+
+  if [[ -f "${AGENTS_DIR}/claude/mcp.json.tpl" ]]; then
+    envsubst "${vars}" < "${AGENTS_DIR}/claude/mcp.json.tpl" > "${HOME}/.claude/.mcp.json"
+    chmod 600 "${HOME}/.claude/.mcp.json"
+  fi
   echo "==> Synced symlinks and rendered templates from ${AGENTS_DIR}"
 }
 
 status_configs() {
-  ls -la \
-    "${HOME}/AGENTS.md" \
-    "${HOME}/.claude/CLAUDE.md" \
-    "${HOME}/.codex/AGENTS.md" \
-    "${HOME}/.gemini/GEMINI.md" \
-    "${HOME}/.claude/settings.json" \
-    "${HOME}/.claude/skills/graphify" \
-    "${HOME}/.codex/skills/graphify" \
-    "${HOME}/.gemini/config/skills/graphify" \
-    "${HOME}/.gemini/skills/graphify"
+  local targets=(
+    "${HOME}/AGENTS.md"
+    "${HOME}/.claude/CLAUDE.md"
+    "${HOME}/.codex/AGENTS.md"
+    "${HOME}/.gemini/GEMINI.md"
+    "${HOME}/.claude/settings.json"
+    "${HOME}/.claude/.mcp.json"
+    "${HOME}/.codex/config.toml"
+    "${HOME}/.gemini/config/mcp_config.json"
+    "${HOME}/.config/zed/settings.json"
+  )
+  local skill_path skill_name
+  for skill_path in "${AGENTS_DIR}/skills"/*; do
+    [[ -d "${skill_path}" ]] || continue
+    skill_name="$(basename "${skill_path}")"
+    targets+=(
+      "${HOME}/.claude/skills/${skill_name}"
+      "${HOME}/.codex/skills/${skill_name}"
+      "${HOME}/.gemini/config/skills/${skill_name}"
+      "${HOME}/.gemini/skills/${skill_name}"
+    )
+  done
+  ls -la "${targets[@]}"
   echo ""
   git -C "${AGENTS_DIR}" status -s
 }
@@ -98,7 +122,7 @@ check_configs() {
 
   echo "==> Verifying .env.secrets.example keys..."
   local tpl_vars
-  tpl_vars="$(rg -o '\$\{[A-Za-z_][A-Za-z0-9_]*\}' "${AGENTS_DIR}/zed" "${AGENTS_DIR}/codex" 2>/dev/null | sed -E 's/.*\$\{([A-Za-z_][A-Za-z0-9_]*)\}/\1/' | sort -u)"
+  tpl_vars="$(rg -o '\$\{[A-Za-z_][A-Za-z0-9_]*\}' "${AGENTS_DIR}/zed" "${AGENTS_DIR}/codex" "${AGENTS_DIR}/gemini" "${AGENTS_DIR}/claude" 2>/dev/null | sed -E 's/.*\$\{([A-Za-z_][A-Za-z0-9_]*)\}/\1/' | sort -u)"
   for var in ${tpl_vars}; do
     if ! grep -qE "^export ${var}=" "${AGENTS_DIR}/.env.secrets.example"; then
       echo "Error: Template variable \${${var}} is missing from .env.secrets.example" >&2
