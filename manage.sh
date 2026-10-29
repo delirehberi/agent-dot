@@ -13,20 +13,26 @@ require_secrets() {
   fi
 }
 
-load_secrets_vars() {
+load_secrets() {
   require_secrets
   set -a
   # shellcheck disable=SC1090
   source "${SECRETS_FILE}"
   set +a
-  grep -E "^export [A-Za-z_][A-Za-z0-9_]*=" "${SECRETS_FILE}" \
-    | sed -E "s/^export ([A-Za-z_][A-Za-z0-9_]*)=.*/\$\1/" \
+}
+
+get_secrets_vars() {
+  require_secrets
+  grep -E "^(export )?[A-Za-z_][A-Za-z0-9_]*=" "${SECRETS_FILE}" \
+    | sed -E "s/^(export )?([A-Za-z_][A-Za-z0-9_]*)=.*/\$\2/" \
+    | tr -d "\r" \
     | tr "\n" " "
 }
 
 sync_configs() {
   local vars
-  vars="$(load_secrets_vars)"
+  load_secrets
+  vars="$(get_secrets_vars)"
 
   mkdir -p \
     "${HOME}/.claude" \
@@ -129,6 +135,17 @@ check_configs() {
       exit 1
     fi
   done
+
+  if [[ -f "${SECRETS_FILE}" ]]; then
+    echo "==> Verifying .env.secrets values for template variables..."
+    load_secrets
+    for var in ${tpl_vars}; do
+      if [[ -z "${!var:-}" ]]; then
+        echo "Error: Template variable \${${var}} is unset or empty in ${SECRETS_FILE}" >&2
+        exit 1
+      fi
+    done
+  fi
 
   echo "==> All checks passed."
 }

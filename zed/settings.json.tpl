@@ -76,6 +76,15 @@
       "headers": {
         "Authorization": "Bearer ${BITIG_API_TOKEN}"
       }
+    },
+    "headroom": {
+      "enabled": true,
+      "remote": false,
+      "command": "${HEADROOM_BIN}",
+      "args": [
+        "mcp",
+        "serve"
+      ]
     }
   },
   "soft_wrap": "editor_width",

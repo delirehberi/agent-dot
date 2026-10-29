@@ -86,6 +86,7 @@ Unified multi-agent dotfiles, operating directives, language-specific engineerin
    - `BITIG_MCP_URL`: Your Bitig MCP endpoint URL
    - `BITIG_API_TOKEN`: Your Bitig API bearer token
    - `NVM_NODE_BIN`: Path to your Node.js `bin` directory for stdio MCP servers
+   - `HEADROOM_BIN`: Path to your `headroom` CLI binary for stdio MCP server
 
 3. **Validate and deploy:**
 
