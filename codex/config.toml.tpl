@@ -26,11 +26,3 @@ wire_api = "responses"
 model_provider = "local_ollama"
 model = "qwen2.5-coder:3b"
 
-[mcp_servers.bitig]
-url = "${BITIG_MCP_URL}"
-http_headers = { Authorization = "Bearer ${BITIG_API_TOKEN}" }
-
-[mcp_servers.headroom]
-command = "${HEADROOM_BIN}"
-args = ["mcp", "serve"]
-

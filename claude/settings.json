@@ -12,7 +12,7 @@
     "agent-skills@addy-agent-skills": false,
     "engineering@synced": false,
     "searchfit-seo@synced": false,
-    "figma-suite@synced": false
+    "figma-suite@synced": true
   },
   "extraKnownMarketplaces": {
     "addy-agent-skills": {

@@ -13,13 +13,16 @@ When working on project files, automatically apply the specific guidelines from 
 
 ## Core Principles & Execution
 * **Strict Plan Adherence:** Once an implementation plan is approved, follow it exactly as agreed. Never unilaterally alter, substitute, or pivot to an alternative path—even if you believe the end result is functionally equivalent.
-* **Mandatory Stop on Blockers/Errors:** If any command, API call, tool, or step fails, hits a permission error (e.g., 403 Forbidden), or encounters an unexpected constraint:
+* **Mandatory Stop on Blockers/Errors:** If a step hits a true blocker—such as a permission/auth/sandbox error (e.g., 403 Forbidden), a missing binary or dependency, a network/service failure, or an unexpected constraint whose fix would deviate from the approved plan:
   1. **STOP** all code writing and modifications immediately.
   2. Explain the exact error and technical constraint clearly.
   3. Propose potential alternatives or request manual intervention.
   4. **WAIT** for explicit approval before proceeding with any new or modified approach.
 
-  This covers environment, tooling, permission, network, and dependency failures, and any failure whose fix would mean leaving the approved plan. It does not cover expected failures inside the agreed work loop (a test written to fail first, a type or compile error in code just written in this step). Fix those in place.
+  **What is NOT a blocker (fix in place without stopping):**
+  - Benign non-zero exit codes (e.g., `rg`, `grep`, or `git diff` returning `1` when no matches/diffs are found).
+  - Trivial, self-correctable agent invocation mistakes (e.g., a wrong CLI flag, regex syntax error, or mistyped file path in a read-only/search command like `rg`, `jq`, or `find`)—simply fix the command arguments and re-run.
+  - Expected failures inside the agreed work loop (a test written to fail first, or a type/compile error in code just written in the current step).
 * **Zero Silent Workarounds:** Never invent or implement workarounds for failed steps independently. Every pivot or plan modification requires mutual agreement first.
 
 ## Workflow & Planning
@@ -49,7 +52,7 @@ When working on project files, automatically apply the specific guidelines from 
   * Always call the binary via its exact host path: `~/.local/bin/nak` so it retains full network relay and host access.
 * **Debugging Tools:** Use existing CLI utilities (such as `curl`,`jq`) for debugging or verification instead of writing temporary Python/Node scripts.
 * **Network Constraints:** If a URL is inaccessible on the first try, do not attempt alternative workarounds or fallbacks. Simply ask for a manual copy-paste of the content.
-* **Command Errors:** If a shell command or program is inaccessible on the first try, do not attempt alternative workarounds or fallbacks. Simply ask for running by the operator itself manually and waits for response to continue. 
+* **Command Errors (Missing / Restricted Programs):** If a required binary, runtime, or daemon is missing, unauthenticated, or blocked by OS/sandbox permissions on the first try (as opposed to an agent flag/syntax typo), do not invent alternative toolchains or fallbacks. Ask the operator to run it manually or grant access and wait for their response.
 
 ## Design & Communication
 * **Language Constraint:** Always communicate exclusively in English, regardless of the language used in the prompt (e.g., Turkish). This includes implementation plans, which must never be prepared in any other language.
@@ -108,6 +111,10 @@ Code is only complete when:
    - Never read lockfiles (`flake.lock`, `package-lock.json`, `cabal.project.freeze`) or build artifacts (`dist-newstyle/`, `.direnv/`, `node_modules/`).
 2. **Concise Git Inspection**:
    - Prefer `git status` and `git diff --stat` over full `git diff` / `git log -p` dumps unless inspecting a specific file's diff.
+3. **Context Compression (`headroom` MCP)**:
+   - Use `headroom_compress` on large tool outputs, logs, search results, JSON payloads, or file excerpts before reasoning over them across turns to save context window space.
+   - Use `headroom_retrieve` (passing the `hash` from `headroom_compress` or `[... hash=<hash>]` compression markers) whenever exact uncompressed details are needed, rather than re-running commands or re-reading full files.
+   - Use `headroom_stats` when inspecting session token and compression savings.
 
 # graphify
 - **graphify** (`~/.agents/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
