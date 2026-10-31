@@ -1,4 +1,3 @@
-model_auto_compact_token_limit = 20000
 model = "gpt-5.5"
 model_reasoning_effort = "low"
 
